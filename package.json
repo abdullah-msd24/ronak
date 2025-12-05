@@ -2,7 +2,7 @@
   "name": "ronak",
   "version": "1.0.0",
   "private": true,
-  "scripts": {
+  "build": {
     "dev": "turbo dev",
     "build": "turbo build",
     "start": "turbo start",
