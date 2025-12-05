@@ -1,0 +1,304 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+  COMPLETED
+}
+
+enum ParticipantStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum ChatRoomType {
+  PERSONAL
+  GROUP
+  EVENT
+  COMMUNITY
+}
+
+enum NotificationType {
+  EVENT_INVITE
+  EVENT_REMINDER
+  EVENT_UPDATE
+  EVENT_CANCELLED
+  JOIN_REQUEST
+  JOIN_APPROVED
+  JOIN_REJECTED
+  NEW_MESSAGE
+  NEW_FOLLOWER
+  NEW_REVIEW
+  EXPERIENCE_POSTED
+  COMMUNITY_INVITE
+  SYSTEM
+}
+
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  password          String?
+  emailVerified     Boolean   @default(false)
+  emailVerifyToken  String?
+  resetToken        String?
+  resetTokenExpiry  DateTime?
+  googleId          String?   @unique
+  facebookId        String?   @unique
+  role              Role      @default(USER)
+  isActive          Boolean   @default(true)
+  lastLoginAt       DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  profile           Profile?
+  hostedEvents      Event[]   @relation("HostedEvents")
+  participations    EventParticipant[]
+  experiences       EventExperience[]
+  communities       CommunityMember[]
+  ownedCommunities  Community[] @relation("OwnedCommunities")
+  sentMessages      Message[] @relation("SentMessages")
+  chatRooms         ChatRoomMember[]
+  reviewsGiven      Review[]  @relation("ReviewsGiven")
+  reviewsReceived   Review[]  @relation("ReviewsReceived")
+  notifications     Notification[]
+
+  @@map("users")
+}
+
+model Profile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  firstName       String
+  lastName        String
+  bio             String?
+  avatar          String?
+  dateOfBirth     DateTime?
+  gender          String?
+  phone           String?
+  city            String?
+  country         String   @default("Pakistan")
+  latitude        Float?
+  longitude       Float?
+  interests       String[]
+  isVerified      Boolean  @default(false)
+  showLocation    Boolean  @default(true)
+  showAge         Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("profiles")
+}
+
+model Event {
+  id              String        @id @default(cuid())
+  hostId          String
+  title           String
+  description     String
+  banner          String?
+  startDate       DateTime
+  endDate         DateTime
+  venue           String
+  address         String?
+  city            String
+  country         String        @default("Pakistan")
+  latitude        Float?
+  longitude       Float?
+  maxParticipants Int?
+  tags            String[]
+  category        String?
+  isOnline        Boolean       @default(false)
+  meetingLink     String?
+  requiresApproval Boolean      @default(false)
+  status          EventStatus   @default(DRAFT)
+  viewCount       Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  host            User          @relation("HostedEvents", fields: [hostId], references: [id], onDelete: Cascade)
+  participants    EventParticipant[]
+  experiences     EventExperience[]
+  chatRoom        ChatRoom?
+  communityId     String?
+  community       Community?    @relation(fields: [communityId], references: [id])
+
+  @@index([city])
+  @@index([startDate])
+  @@index([status])
+  @@map("events")
+}
+
+model EventParticipant {
+  id          String            @id @default(cuid())
+  eventId     String
+  userId      String
+  status      ParticipantStatus @default(PENDING)
+  joinedAt    DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  event       Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+  @@map("event_participants")
+}
+
+model EventExperience {
+  id          String   @id @default(cuid())
+  eventId     String
+  userId      String
+  title       String
+  content     String
+  rating      Int?     @db.SmallInt
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+  @@index([eventId])
+  @@index([userId])
+  @@map("event_experiences")
+}
+
+model Community {
+  id          String   @id @default(cuid())
+  ownerId     String
+  name        String
+  description String?
+  avatar      String?
+  banner      String?
+  city        String?
+  country     String   @default("Pakistan")
+  category    String?
+  tags        String[]
+  isPrivate   Boolean  @default(false)
+  memberCount Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owner       User     @relation("OwnedCommunities", fields: [ownerId], references: [id], onDelete: Cascade)
+  members     CommunityMember[]
+  events      Event[]
+  chatRoom    ChatRoom?
+
+  @@index([city])
+  @@map("communities")
+}
+
+model CommunityMember {
+  id          String   @id @default(cuid())
+  communityId String
+  userId      String
+  role        String   @default("MEMBER")
+  joinedAt    DateTime @default(now())
+
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([communityId, userId])
+  @@map("community_members")
+}
+
+model ChatRoom {
+  id          String       @id @default(cuid())
+  name        String?
+  type        ChatRoomType @default(PERSONAL)
+  eventId     String?      @unique
+  communityId String?      @unique
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  event       Event?       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  community   Community?   @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  members     ChatRoomMember[]
+  messages    Message[]
+
+  @@map("chat_rooms")
+}
+
+model ChatRoomMember {
+  id         String   @id @default(cuid())
+  chatRoomId String
+  userId     String
+  joinedAt   DateTime @default(now())
+  lastReadAt DateTime @default(now())
+
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([chatRoomId, userId])
+  @@map("chat_room_members")
+}
+
+model Message {
+  id         String   @id @default(cuid())
+  chatRoomId String
+  senderId   String
+  content    String
+  isEdited   Boolean  @default(false)
+  isDeleted  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([chatRoomId])
+  @@index([createdAt])
+  @@map("messages")
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  reviewerId String
+  revieweeId String
+  eventId    String?
+  rating     Int      @db.SmallInt
+  comment    String?
+  type       String   @default("HOST")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  reviewer   User     @relation("ReviewsGiven", fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewee   User     @relation("ReviewsReceived", fields: [revieweeId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewerId, revieweeId, eventId])
+  @@index([revieweeId])
+  @@map("reviews")
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  data      Json?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("notifications")
+}

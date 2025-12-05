@@ -1,0 +1,310 @@
+{
+  "components": {
+    "ui": {
+      "button": {
+        "type": "button",
+        "styles": {
+          "base": "px-4 py-2 rounded-md",
+          "primary": "bg-ff6f3c text-white",
+          "secondary": "bg-1a1a1a text-white",
+          "disabled": "bg-gray-400 cursor-not-allowed"
+        }
+      },
+      "card": {
+        "styles": {
+          "base": "shadow-lg rounded-lg p-4 bg-white",
+          "header": "font-bold text-lg",
+          "body": "text-gray-700"
+        }
+      },
+      "input": {
+        "styles": {
+          "base": "border rounded-md p-2",
+          "focus": "border-ff6f3c outline-none"
+        }
+      },
+      "modal": {
+        "styles": {
+          "base": "fixed inset-0 flex items-center justify-center bg-black bg-opacity-50",
+          "content": "bg-white rounded-lg p-4"
+        }
+      },
+      "avatar": {
+        "styles": {
+          "base": "rounded-full",
+          "size": {
+            "small": "h-8 w-8",
+            "medium": "h-12 w-12",
+            "large": "h-16 w-16"
+          }
+        }
+      },
+      "badge": {
+        "styles": {
+          "base": "inline-block px-2 py-1 rounded-full text-white",
+          "success": "bg-green-500",
+          "warning": "bg-yellow-500",
+          "error": "bg-red-500"
+        }
+      },
+      "tabs": {
+        "styles": {
+          "base": "flex space-x-4",
+          "active": "border-b-2 border-ff6f3c"
+        }
+      },
+      "dropdown": {
+        "styles": {
+          "base": "relative inline-block text-left",
+          "menu": "absolute right-0 z-10 mt-2 w-56 rounded-md shadow-lg bg-white"
+        }
+      },
+      "toast": {
+        "styles": {
+          "base": "fixed bottom-4 right-4 p-4 rounded-lg shadow-lg",
+          "success": "bg-green-500 text-white",
+          "error": "bg-red-500 text-white"
+        }
+      },
+      "skeleton": {
+        "styles": {
+          "base": "animate-pulse bg-gray-300 rounded-md"
+        }
+      }
+    },
+    "layout": {
+      "header": {
+        "styles": {
+          "base": "flex items-center justify-between p-4 bg-1a1a1a text-white"
+        }
+      },
+      "footer": {
+        "styles": {
+          "base": "p-4 bg-1a1a1a text-white text-center"
+        }
+      },
+      "sidebar": {
+        "styles": {
+          "base": "w-64 bg-white shadow-lg",
+          "item": "p-2 hover:bg-gray-100"
+        }
+      },
+      "mobile-nav": {
+        "styles": {
+          "base": "fixed inset-0 bg-white z-50"
+        }
+      },
+      "admin-sidebar": {
+        "styles": {
+          "base": "w-64 bg-gray-200 shadow-lg",
+          "item": "p-2 hover:bg-gray-300"
+        }
+      }
+    },
+    "auth": {
+      "login-form": {
+        "fields": ["email", "password"],
+        "submitButton": "Login"
+      },
+      "signup-form": {
+        "fields": ["name", "email", "password", "confirmPassword"],
+        "submitButton": "Sign Up"
+      },
+      "forgot-password-form": {
+        "fields": ["email"],
+        "submitButton": "Reset Password"
+      },
+      "social-login-buttons": {
+        "providers": ["Google", "Facebook"]
+      },
+      "auth-provider": {
+        "type": "context"
+      }
+    },
+    "events": {
+      "event-card": {
+        "styles": {
+          "base": "shadow-md rounded-lg p-4 bg-white",
+          "title": "font-bold text-xl",
+          "date": "text-gray-500"
+        }
+      },
+      "event-list": {
+        "styles": {
+          "base": "space-y-4"
+        }
+      },
+      "event-details": {
+        "styles": {
+          "base": "p-4 bg-white rounded-lg shadow-md"
+        }
+      },
+      "event-form": {
+        "fields": ["title", "description", "date", "location", "tags"],
+        "submitButton": "Create Event"
+      },
+      "event-participants": {
+        "styles": {
+          "base": "p-4 bg-gray-100 rounded-lg"
+        }
+      },
+      "event-chat": {
+        "styles": {
+          "base": "p-4 bg-white rounded-lg shadow-md"
+        }
+      },
+      "trending-events": {
+        "styles": {
+          "base": "space-y-4"
+        }
+      }
+    },
+    "experiences": {
+      "experience-card": {
+        "styles": {
+          "base": "shadow-md rounded-lg p-4 bg-white",
+          "title": "font-bold text-lg",
+          "content": "text-gray-700"
+        }
+      },
+      "experience-list": {
+        "styles": {
+          "base": "space-y-4"
+        }
+      },
+      "experience-form": {
+        "fields": ["title", "experienceDetails", "rating"],
+        "submitButton": "Share Experience"
+      },
+      "experience-feed": {
+        "styles": {
+          "base": "space-y-4"
+        }
+      }
+    },
+    "communities": {
+      "community-card": {
+        "styles": {
+          "base": "shadow-md rounded-lg p-4 bg-white",
+          "title": "font-bold text-lg",
+          "members": "text-gray-500"
+        }
+      },
+      "community-list": {
+        "styles": {
+          "base": "space-y-4"
+        }
+      },
+      "community-details": {
+        "styles": {
+          "base": "p-4 bg-white rounded-lg shadow-md"
+        }
+      },
+      "community-form": {
+        "fields": ["name", "description"],
+        "submitButton": "Create Community"
+      },
+      "community-chat": {
+        "styles": {
+          "base": "p-4 bg-white rounded-lg shadow-md"
+        }
+      }
+    },
+    "profile": {
+      "profile-card": {
+        "styles": {
+          "base": "shadow-md rounded-lg p-4 bg-white",
+          "name": "font-bold text-xl",
+          "bio": "text-gray-700"
+        }
+      },
+      "profile-form": {
+        "fields": ["name", "bio", "age", "city", "interests"],
+        "submitButton": "Update Profile"
+      },
+      "user-events": {
+        "styles": {
+          "base": "space-y-4"
+        }
+      },
+      "user-experiences": {
+        "styles": {
+          "base": "space-y-4"
+        }
+      },
+      "user-reviews": {
+        "styles": {
+          "base": "space-y-4"
+        }
+      }
+    },
+    "chat": {
+      "chat-list": {
+        "styles": {
+          "base": "space-y-4"
+        }
+      },
+      "chat-window": {
+        "styles": {
+          "base": "p-4 bg-white rounded-lg shadow-md"
+        }
+      },
+      "message-bubble": {
+        "styles": {
+          "base": "p-2 rounded-lg",
+          "sent": "bg-ff6f3c text-white",
+          "received": "bg-gray-200"
+        }
+      },
+      "emoji-picker": {
+        "styles": {
+          "base": "absolute z-10"
+        }
+      }
+    },
+    "reviews": {
+      "review-card": {
+        "styles": {
+          "base": "shadow-md rounded-lg p-4 bg-white",
+          "content": "text-gray-700"
+        }
+      },
+      "review-form": {
+        "fields": ["rating", "comment"],
+        "submitButton": "Submit Review"
+      },
+      "star-rating": {
+        "styles": {
+          "base": "flex space-x-1"
+        }
+      }
+    },
+    "home": {
+      "hero-section": {
+        "styles": {
+          "base": "bg-ff6f3c text-white p-8 text-center"
+        }
+      },
+      "featured-events": {
+        "styles": {
+          "base": "space-y-4"
+        }
+      },
+      "recent-experiences": {
+        "styles": {
+          "base": "space-y-4"
+        }
+      },
+      "popular-communities": {
+        "styles": {
+          "base": "space-y-4"
+        }
+      },
+      "recommended-users": {
+        "styles": {
+          "base": "space-y-4"
+        }
+      }
+    }
+  }
+}

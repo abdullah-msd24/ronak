@@ -1,0 +1,29 @@
+{
+  "pipeline": {
+    "build": {
+      "outputs": [
+        "apps/web/.next/**",
+        "apps/api/dist/**"
+      ]
+    },
+    "dev": {
+      "outputs": [
+        "apps/web/.next/**",
+        "apps/api/dist/**"
+      ]
+    },
+    "lint": {
+      "outputs": []
+    },
+    "test": {
+      "outputs": []
+    }
+  },
+  "global": {
+    "cache": {
+      "paths": [
+        "node_modules/.cache"
+      ]
+    }
+  }
+}

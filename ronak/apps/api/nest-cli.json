@@ -1,0 +1,11 @@
+{
+  "collection": {
+    "default": {
+      "sourceRoot": "src",
+      "compilerOptions": {
+        "assets": ["**/*.hbs"],
+        "watchAssets": true
+      }
+    }
+  }
+}

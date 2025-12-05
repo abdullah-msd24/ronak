@@ -1,0 +1,113 @@
+model User {
+  id                Int      @id @default(autoincrement())
+  name              String
+  email             String   @unique
+  password          String
+  bio               String?
+  age               Int?
+  city              String?
+  interests         String[]
+  profilePhoto      String?
+  verificationBadge Boolean  @default(false)
+  eventHistory      EventParticipant[]
+  experiences       EventExperience[]
+  reviews           Review[]
+  communities       CommunityMember[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Profile {
+  id        Int    @id @default(autoincrement())
+  userId    Int    @unique
+  user      User   @relation(fields: [userId], references: [id])
+}
+
+model Event {
+  id                Int                @id @default(autoincrement())
+  title             String
+  description       String
+  banner            String
+  tags              String[]
+  maxParticipants   Int
+  participants      EventParticipant[]
+  experiences       EventExperience[]
+  hostId            Int
+  host              User                @relation(fields: [hostId], references: [id])
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+}
+
+model EventParticipant {
+  id        Int    @id @default(autoincrement())
+  eventId   Int
+  userId    Int
+  event     Event  @relation(fields: [eventId], references: [id])
+  user      User   @relation(fields: [userId], references: [id])
+}
+
+model EventExperience {
+  id        Int    @id @default(autoincrement())
+  eventId   Int
+  userId    Int
+  title     String
+  details   String
+  rating     Int?  @default(0)
+  event     Event  @relation(fields: [eventId], references: [id])
+  user      User   @relation(fields: [userId], references: [id])
+}
+
+model Review {
+  id        Int    @id @default(autoincrement())
+  userId    Int
+  hostId    Int
+  rating     Int
+  comment    String
+  user      User   @relation(fields: [userId], references: [id])
+  host      User   @relation(fields: [hostId], references: [id])
+}
+
+model Community {
+  id          Int              @id @default(autoincrement())
+  name        String
+  description String
+  members     CommunityMember[]
+  events      Event[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model CommunityMember {
+  id          Int      @id @default(autoincrement())
+  communityId Int
+  userId      Int
+  community   Community @relation(fields: [communityId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
+}
+
+model ChatRoom {
+  id        Int      @id @default(autoincrement())
+  name      String
+  members   User[]   @relation("ChatRoomMembers")
+  messages   Message[]
+  createdAt DateTime  @default(now())
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  chatRoomId Int
+  userId    Int
+  content   String
+  chatRoom  ChatRoom @relation(fields: [chatRoomId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  message   String
+  isRead    Boolean   @default(false)
+  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime   @default(now())
+}

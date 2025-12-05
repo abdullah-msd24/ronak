@@ -1,0 +1,48 @@
+{
+  "name": "ronak-api",
+  "version": "1.0.0",
+  "description": "Backend API for RONAK - a social event and meetup platform for Pakistan.",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "ts-node src/main.ts",
+    "build": "tsc",
+    "lint": "eslint . --ext .ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@nestjs/common": "^9.0.0",
+    "@nestjs/core": "^9.0.0",
+    "@nestjs/jwt": "^9.0.0",
+    "@nestjs/passport": "^9.0.0",
+    "@nestjs/typeorm": "^9.0.0",
+    "passport": "^0.4.1",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-facebook": "^3.0.0",
+    "pg": "^8.7.1",
+    "prisma": "^3.0.0",
+    "class-validator": "^0.13.1",
+    "class-transformer": "^0.4.0",
+    "dotenv": "^10.0.0",
+    "multer": "^1.4.3",
+    "socket.io": "^4.0.0"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "^9.0.0",
+    "ts-jest": "^27.0.0",
+    "jest": "^27.0.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.5.0",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^8.0.0",
+    "eslint-plugin-prettier": "^4.0.0"
+  },
+  "keywords": [
+    "nestjs",
+    "api",
+    "ronak",
+    "meetup",
+    "events"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
