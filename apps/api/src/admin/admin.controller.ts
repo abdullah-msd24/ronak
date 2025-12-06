@@ -1,79 +1,57 @@
-import { Controller, Get, Delete, Put, Param, Query, UseGuards, Request, ForbiddenException, Body } from '@nestjs/common';
+import { Controller, Get, Delete, Param, UseGuards, Request, ForbiddenException } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@Controller('admin')
+@Controller('api/admin')
 @UseGuards(JwtAuthGuard)
 export class AdminController {
   constructor(private adminService: AdminService) {}
 
-  private checkAdmin(req: any) {
-    if (req.user.role !== 'ADMIN') {
+  private checkAdmin(user: any) {
+    if (user.role !== 'ADMIN') {
       throw new ForbiddenException('Admin access required');
     }
   }
 
   @Get('dashboard')
-  async getDashboard(@Request() req) {
-    this.checkAdmin(req);
-    return this.adminService.getDashboardStats();
+  async getDashboard(@Request() req: any) {
+    this.checkAdmin(req.user);
+    return this.adminService.getDashboard();
   }
 
   @Get('users')
-  async getUsers(
-    @Request() req,
-    @Query('page') page: string = '1',
-    @Query('limit') limit: string = '10',
-  ) {
-    this.checkAdmin(req);
-    return this.adminService.getAllUsers(parseInt(page), parseInt(limit));
+  async getAllUsers(@Request() req: any) {
+    this.checkAdmin(req.user);
+    return this.adminService.getAllUsers();
   }
 
   @Get('events')
-  async getEvents(
-    @Request() req,
-    @Query('page') page: string = '1',
-    @Query('limit') limit: string = '10',
-  ) {
-    this.checkAdmin(req);
-    return this.adminService.getAllEvents(parseInt(page), parseInt(limit));
+  async getAllEvents(@Request() req: any) {
+    this.checkAdmin(req.user);
+    return this.adminService.getAllEvents();
   }
 
   @Get('meetups')
-  async getMeetups(
-    @Request() req,
-    @Query('page') page: string = '1',
-    @Query('limit') limit: string = '10',
-  ) {
-    this.checkAdmin(req);
-    return this.adminService.getAllMeetups(parseInt(page), parseInt(limit));
+  async getAllMeetups(@Request() req: any) {
+    this.checkAdmin(req.user);
+    return this.adminService.getAllMeetups();
   }
 
   @Delete('users/:id')
-  async deleteUser(@Request() req, @Param('id') id: string) {
-    this.checkAdmin(req);
-    return this.adminService.deleteUser(id);
+  async deleteUser(@Param('id') id: string, @Request() req: any) {
+    this.checkAdmin(req.user);
+    return this.adminService.deleteUser(id, req.user.id);
   }
 
   @Delete('events/:id')
-  async deleteEvent(@Request() req, @Param('id') id: string) {
-    this.checkAdmin(req);
+  async deleteEvent(@Param('id') id: string, @Request() req: any) {
+    this.checkAdmin(req.user);
     return this.adminService.deleteEvent(id);
   }
 
   @Delete('meetups/:id')
-  async deleteMeetup(@Request() req, @Param('id') id: string) {
-    this.checkAdmin(req);
+  async deleteMeetup(@Param('id') id: string, @Request() req: any) {
+    this.checkAdmin(req.user);
     return this.adminService.deleteMeetup(id);
-  }
-
-  @Put('users/:id/role')
-  async updateUserRole(
-    @Request() req,
-    @Param('id') id: string,
-    @Body('role') role: string,
-  ) {
-    this.checkAdmin(req);
-    return this.adminService.updateUserRole(id, role);
   }
 }
